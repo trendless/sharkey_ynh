@@ -3,22 +3,23 @@
 #=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression "Installing dependencies..."
+
+ynh_nodejs_install
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-mkdir -p "$install_dir"
-chown -R $app:www-data "$install_dir"
-
-ynh_hide_warnings git clone --recurse-submodules -b stable https://activitypub.software/TransFem-org/Sharkey.git "$install_dir"
-
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
+ynh_setup_source --dest_dir="$install_dir"
+ynh_setup_source --dest_dir="$install_dir/fluent-emojis" --source_id="emojis"
 
 #=================================================
 # APP INITIAL CONFIGURATION
@@ -32,13 +33,6 @@ ynh_app_setting_set --key=redis_db --value="$redis_db"
 ynh_config_add --template="default.yml" --destination="$install_dir/.config/default.yml"
 
 #=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression "Installing dependencies..."
-
-ynh_nodejs_install
-
-#=================================================
 # BUILD APP
 #=================================================
 ynh_script_progression "Building $app..."
@@ -47,13 +41,12 @@ pushd "$install_dir"
     corepack enable
     export CYPRESS_INSTALL_BINARY=0
     ynh_hide_warnings npm install -g corepack@latest
-	ynh_hide_warnings corepack prepare pnpm@latest --activate
-    ynh_hide_warnings ynh_exec_as_app NODE_ENV=production CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm add jest-worker -w
-    ynh_hide_warnings ynh_exec_as_app NODE_ENV=production CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm install --frozen-lockfile
+    ynh_hide_warnings ynh_exec_as_app NODE_ENV=production CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm install --frozen-lockfile --aggregate-output
+    ynh_hide_warnings ynh_exec_as_app NODE_ENV=production CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm add jest-worker minimatch @vue/compiler-core -w
     ynh_hide_warnings ynh_exec_as_app NODE_ENV=production CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm build
-	ynh_hide_warnings ynh_exec_as_app pnpm run init
-
-	#remove unneeded files
+    ynh_hide_warnings ynh_exec_as_app NODE_ENV=production CYPRESS_INSTALL_BINARY=0 NODE_OPTIONS="--max-old-space-size=3000" pnpm init
+    
+    #remove unneeded files
     ynh_hide_warnings ynh_exec_as_app NODE_ENV=production pnpm prune
     ynh_hide_warnings ynh_exec_as_app pnpm store prune
 popd
@@ -84,5 +77,4 @@ ynh_systemctl --service="$app" --action="start" --wait_until="listening on" --lo
 #=================================================
 # END OF SCRIPT
 #=================================================
-
 ynh_script_progression "Installation of $app completed"

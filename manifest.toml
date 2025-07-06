@@ -45,20 +45,36 @@ ram.runtime = "50M"
     [resources.sources.main]
     url = "https://activitypub.software/TransFem-org/Sharkey/-/archive/2025.4.2/Sharkey-2025.4.2.tar.bz2"
     sha256 = "2fc0dc7060d484a96a483a1464f7191686e054eb9c68e30bc01190bf188fd993"
+    autoupdate.strategy = "latest_gitlab_tag"
 
-    autoupdate.strategy = "latest_gitlab_release"
+    [resources.sources.emojis]
+    url = "https://github.com/misskey-dev/emojis/archive/cae981eb4c5189ea9ea3230e83b876a5068df7d1.tar.gz"
+    sha256 = "ae155e4bf26bbce83e67db34b353613e1ad90ea27da20fc2d74df93b3a5e3d12"
+    autoupdate.upstream = "https://github.com/misskey-dev/emojis"
+    autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
 
     [resources.install_dir]
-
+    group = "www-data:r-x"
+    
     [resources.permissions]
     main.url = "/"
 
     [resources.ports]
 
     [resources.apt]
-    packages = "ffmpeg, postgresql, git, build-essential, redis-server, pkg-config, libpango1.0-dev, libcairo2-dev, libpixman-1-dev"
+    packages = [
+        "ffmpeg", 
+        "postgresql",
+        "git",
+        "build-essential",
+        "redis-server",
+        "pkg-config",
+        "libpango1.0-dev",
+        "libcairo2-dev", 
+        "libpixman-1-dev"
+    ]
 
     [resources.database]
     type = "postgresql"
