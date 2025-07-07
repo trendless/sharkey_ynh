@@ -45,7 +45,7 @@ ram.runtime = "50M"
     [resources.sources.main]
     url = "https://activitypub.software/TransFem-org/Sharkey/-/archive/2025.4.2/Sharkey-2025.4.2.tar.bz2"
     sha256 = "2fc0dc7060d484a96a483a1464f7191686e054eb9c68e30bc01190bf188fd993"
-    autoupdate.strategy = "latest_gitlab_tag"
+    autoupdate.strategy = "latest_gitlab_release"
 
     [resources.sources.emojis]
     url = "https://github.com/misskey-dev/emojis/archive/cae981eb4c5189ea9ea3230e83b876a5068df7d1.tar.gz"
