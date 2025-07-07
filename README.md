@@ -10,7 +10,7 @@ It shall NOT be edited by hand.
 
 Microblogging platform
 
-[![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://git.joinsharkey.org/Sharkey)
+[![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://joinsharkey.org)
 [![Version: 2025.4.2~ynh1](https://img.shields.io/badge/Version-2025.4.2~ynh1-rgba(0,150,0,1)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/sharkey/)
 
 <div align="center">
