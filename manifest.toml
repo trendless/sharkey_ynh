@@ -13,7 +13,7 @@ maintainers = ["oufmilo"]
 
 [upstream]
 license = "AGPL-3.0"
-website = "https://git.joinsharkey.org/Sharkey"
+website = "https://joinsharkey.org"
 code = "https://activitypub.software/TransFem-org/Sharkey"
 
 [integration]
